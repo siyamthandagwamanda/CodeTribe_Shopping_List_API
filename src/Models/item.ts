@@ -17,7 +17,7 @@ export interface UpdateItemInput{
     purchased?: boolean;
 }
 
-export  function validateCreateInput(body: any): body is CreateItemInput{
+function validateCreateInput(body: any): body is CreateItemInput{
     if (!body || typeof body !== "object"){
         return false;
     }
