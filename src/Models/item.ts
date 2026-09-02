@@ -10,3 +10,9 @@ export interface CreateItemInput{
     name: string;
     quantity: string | number;
 }
+
+export interface UpdateItemInput{
+    name?: string;
+    quantity?: string | number;
+    purchased?: boolean;
+}
