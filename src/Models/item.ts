@@ -5,3 +5,8 @@ export interface ShoppingItem{
     purchased: boolean;
     createdAt: string
 }
+
+export interface CreateItemInput{
+    name: string;
+    quantity: string | number;
+}
