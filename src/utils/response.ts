@@ -27,6 +27,22 @@ export function parseJsonBody<T>(req: IncomingMessage): Promise<T>{
         req.on("data", (chunks) => {
             body += chunks.toString();
         })
+
+        req.on("end", () => {
+            if (!body.trim()){
+                resolve({} as T);
+                return;
+            }
+            try{
+                resolve(JSON.parse(body) as T);
+            }catch(err){
+                rejects(new Error("Malformed JSON payload structure"))
+            }
+        });
+
+        req.on("error", (err) => {
+            rejects(err)
+        })
         
     })
 }
