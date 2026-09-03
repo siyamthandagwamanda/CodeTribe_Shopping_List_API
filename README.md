@@ -1,6 +1,6 @@
 <img src="https://socialify.git.ci/siyamthandagwamanda/CodeTribe_Shopping_List_API/image?language=1&owner=1&name=1&stargazers=1&theme=Light" alt="CodeTribe_Shopping_List_API" width="640" height="320" />
 
-#Node.js & TypeScript Shopping List REST API
+Node.js & TypeScript Shopping List REST API
 
 A lightweight, zero-dependency REST API engineered purely with the Node.js native `http` module and strict TypeScript.
 
