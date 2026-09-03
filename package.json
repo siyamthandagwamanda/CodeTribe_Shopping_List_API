@@ -7,7 +7,7 @@
     "build": "tsc",
     "start": "node dist/server.js",
     "dev": "npx ts-node src/server.ts",
-    "test:api": "newman run tests/shopping_list_api.postman_collection.json"
+    "test:api": "newman run test/shopping_list_api.postman_collection.json"
   },
   "keywords": [],
   "author": "",
