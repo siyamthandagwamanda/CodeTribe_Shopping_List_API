@@ -60,3 +60,4 @@ export interface UpdateItemInput {
 
     return true;
 }
+export { validateCreateInput, validateUpdateInput };
