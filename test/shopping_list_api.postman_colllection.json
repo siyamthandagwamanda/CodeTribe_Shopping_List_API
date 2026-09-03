@@ -1,8 +1,7 @@
 {
   "info": {
-    "name": "Shopping List API (Native TypeScript)",
-    "description": "Integration testing matrix for the native Node.js HTTP frameworkless API.",
-    "schema": "https://getpostman.com"
+    "name": "Shopping List API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "item": [
     {
@@ -20,15 +19,15 @@
       }
     },
     {
-      "name": "Create New Item",
+      "name": "Create Item",
       "event": [
         {
           "listen": "test",
           "script": {
             "exec": [
-              "const response = pm.response.json();",
-              "if (response.success && response.data && response.data.id) {",
-              "    pm.collectionVariables.set('latest_item_id', response.data.id);",
+              "const res = pm.response.json();",
+              "if (res.data?.id) {",
+              "    pm.collectionVariables.set('latest_item_id', res.data.id);",
               "}"
             ],
             "type": "text/javascript"
@@ -40,8 +39,7 @@
         "header": [
           {
             "key": "Content-Type",
-            "value": "application/json",
-            "type": "text"
+            "value": "application/json"
           }
         ],
         "body": {
@@ -58,7 +56,7 @@
       }
     },
     {
-      "name": "Get Single Item by ID",
+      "name": "Get Item by ID",
       "request": {
         "method": "GET",
         "header": [],
@@ -72,14 +70,13 @@
       }
     },
     {
-      "name": "Update Item Structure",
+      "name": "Update Item",
       "request": {
         "method": "PUT",
         "header": [
           {
             "key": "Content-Type",
-            "value": "application/json",
-            "type": "text"
+            "value": "application/json"
           }
         ],
         "body": {
@@ -96,7 +93,7 @@
       }
     },
     {
-      "name": "Delete Item From Storage",
+      "name": "Delete Item",
       "request": {
         "method": "DELETE",
         "header": [],
@@ -110,14 +107,13 @@
       }
     },
     {
-      "name": "Trigger 400 Validation Error",
+      "name": "Create Item - Invalid Input",
       "request": {
         "method": "POST",
         "header": [
           {
             "key": "Content-Type",
-            "value": "application/json",
-            "type": "text"
+            "value": "application/json"
           }
         ],
         "body": {
