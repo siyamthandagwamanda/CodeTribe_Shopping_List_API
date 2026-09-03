@@ -8,3 +8,12 @@ export interface ApiResponse<T = any>{
         details?: any;
     };
 }
+
+export function sendJson<T>(
+    res: ServerResponse,
+    statusCode: number,
+    payload: ApiResponse<T>
+): void {
+    res.writeHead(statusCode, {"content-type": "application/json"})
+    res.end(JSON.stringify(payload))
+}
