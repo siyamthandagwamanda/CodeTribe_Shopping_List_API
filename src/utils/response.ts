@@ -1,3 +1,5 @@
+import { rejects } from "assert";
+import { resolve } from "dns";
 import { IncomingMessage, ServerResponse } from "http"
 
 export interface ApiResponse<T = any>{
@@ -16,4 +18,15 @@ export function sendJson<T>(
 ): void {
     res.writeHead(statusCode, {"content-type": "application/json"})
     res.end(JSON.stringify(payload))
+}
+
+export function parseJsonBody<T>(req: IncomingMessage): Promise<T>{
+    return new Promise((resolve, rejects) => {
+        let body = "";
+
+        req.on("data", (chunks) => {
+            body += chunks.toString();
+        })
+        
+    })
 }
