@@ -1,0 +1,144 @@
+{
+  "info": {
+    "name": "Shopping List API (Native TypeScript)",
+    "description": "Integration testing matrix for the native Node.js HTTP frameworkless API.",
+    "schema": "https://getpostman.com"
+  },
+  "item": [
+    {
+      "name": "Get All Items",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:3000/items",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "3000",
+          "path": ["items"]
+        }
+      }
+    },
+    {
+      "name": "Create New Item",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "const response = pm.response.json();",
+              "if (response.success && response.data && response.data.id) {",
+              "    pm.collectionVariables.set('latest_item_id', response.data.id);",
+              "}"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"name\": \"Apples\",\n    \"quantity\": 6\n}"
+        },
+        "url": {
+          "raw": "http://localhost:3000/items",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "3000",
+          "path": ["items"]
+        }
+      }
+    },
+    {
+      "name": "Get Single Item by ID",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:3000/items/{{latest_item_id}}",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "3000",
+          "path": ["items", "{{latest_item_id}}"]
+        }
+      }
+    },
+    {
+      "name": "Update Item Structure",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"name\": \"Organic Apples\",\n    \"quantity\": \"1 Bag\",\n    \"purchased\": true\n}"
+        },
+        "url": {
+          "raw": "http://localhost:3000/items/{{latest_item_id}}",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "3000",
+          "path": ["items", "{{latest_item_id}}"]
+        }
+      }
+    },
+    {
+      "name": "Delete Item From Storage",
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:3000/items/{{latest_item_id}}",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "3000",
+          "path": ["items", "{{latest_item_id}}"]
+        }
+      }
+    },
+    {
+      "name": "Trigger 400 Validation Error",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"name\": \"\",\n    \"quantity\": false\n}"
+        },
+        "url": {
+          "raw": "http://localhost:3000/items",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "3000",
+          "path": ["items"]
+        }
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "latest_item_id",
+      "value": "1",
+      "type": "string"
+    }
+  ]
+}
