@@ -1,4 +1,3 @@
-
 export interface ShoppingItem {
     id: string;
     name: string;
@@ -18,46 +17,36 @@ export interface UpdateItemInput {
     purchased?: boolean;
 }
 
- function validateCreateInput(body: any): body is CreateItemInput {
-    if (!body || typeof body !== "object") {
-        return false;
-    }
+function isValidQuantity(q: unknown): boolean {
+    return typeof q === "number" || (typeof q === "string" && q.trim().length > 0);
+}
 
-    if (typeof body.name !== "string" || body.name.trim() === "") {
-        return false;
-    }
-
-
-    if (typeof body.quantity !== "number" && (typeof body.quantity !== "string" || body.quantity.trim() === "")) {
-        return false;
-    }
+export function validateCreateInput(body: unknown): body is CreateItemInput {
+    if (typeof body !== "object" || body === null) return false;
     
-    return true;
+    const { name, quantity } = body as Record<string, unknown>;
+    
+    return typeof name === "string" && name.trim().length > 0 && isValidQuantity(quantity);
 }
 
- function validateUpdateInput(body: any): body is UpdateItemInput {
-    if (!body || typeof body !== "object") {
-        return false;
-    }
+export function validateUpdateInput(body: unknown): body is UpdateItemInput {
+    if (typeof body !== "object" || body === null) return false;
+    
+    const entries = Object.entries(body as Record<string, unknown>);
+    if (entries.length === 0) return false;
 
-    if (Object.keys(body).length === 0) {
-        return false;
-    }
-
-
-    if (body.name !== undefined && (typeof body.name !== "string" || body.name.trim() === "")) {
-        return false;
-    }
-
-   
-    if (body.quantity !== undefined && typeof body.quantity !== "number" && (typeof body.quantity !== "string" || body.quantity.trim() === "")) {
-        return false;
-    }
-
-    if (body.purchased !== undefined && typeof body.purchased !== "boolean") {
-        return false;
-    }
-
-    return true;
+    return entries.every(([key, value]) => {
+        if (value === undefined) return true;
+        
+        switch (key) {
+            case "name":
+                return typeof value === "string" && value.trim().length > 0;
+            case "quantity":
+                return isValidQuantity(value);
+            case "purchased":
+                return typeof value === "boolean";
+            default:
+                return true;
+        }
+    });
 }
-export { validateCreateInput, validateUpdateInput };
