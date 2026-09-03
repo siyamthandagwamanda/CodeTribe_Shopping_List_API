@@ -1,48 +1,48 @@
-import { rejects } from "assert";
-import { resolve } from "dns";
-import { IncomingMessage, ServerResponse } from "http"
+import { IncomingMessage, ServerResponse } from "http";
 
-export interface ApiResponse<T = any>{
-    success: boolean;
-    data?: T;
-    error?: {
-        message: string;
-        details?: any;
-    };
+export interface ApiResponse<T = unknown> {
+  success: boolean;
+  data?: T;
+  error?: {
+    message: string;
+    details?: unknown;
+  };
 }
 
 export function sendJson<T>(
-    res: ServerResponse,
-    statusCode: number,
-    payload: ApiResponse<T>
+  res: ServerResponse,
+  statusCode: number,
+  payload: ApiResponse<T>
 ): void {
-    res.writeHead(statusCode, {"content-type": "application/json"})
-    res.end(JSON.stringify(payload))
+  res.writeHead(statusCode, { "Content-Type": "application/json" });
+  res.end(JSON.stringify(payload));
 }
 
-export function parseJsonBody<T>(req: IncomingMessage): Promise<T>{
-    return new Promise((resolve, rejects) => {
-        let body = "";
+export function parseJsonBody<T>(req: IncomingMessage): Promise<T> {
+  return new Promise((resolve, reject) => {
+    const chunks: Buffer[] = [];
 
-        req.on("data", (chunks) => {
-            body += chunks.toString();
-        })
+    req.on("data", (chunk: Buffer) => {
+      chunks.push(chunk);
+    });
 
-        req.on("end", () => {
-            if (!body.trim()){
-                resolve({} as T);
-                return;
-            }
-            try{
-                resolve(JSON.parse(body) as T);
-            }catch(err){
-                rejects(new Error("Malformed JSON payload structure"))
-            }
-        });
+    req.on("end", () => {
+      const body = Buffer.concat(chunks).toString("utf-8");
 
-        req.on("error", (err) => {
-            rejects(err)
-        })
-        
-    })
+      if (!body.trim()) {
+        resolve({} as T);
+        return;
+      }
+
+      try {
+        resolve(JSON.parse(body) as T);
+      } catch {
+        reject(new Error("Invalid JSON payload"));
+      }
+    });
+
+    req.on("error", (err) => {
+      reject(err);
+    });
+  });
 }
