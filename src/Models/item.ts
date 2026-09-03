@@ -17,36 +17,56 @@ export interface UpdateItemInput {
     purchased?: boolean;
 }
 
-function isValidQuantity(q: unknown): boolean {
-    return typeof q === "number" || (typeof q === "string" && q.trim().length > 0);
+function isValidQuantity(value: unknown) {
+    return typeof value === "number" ||
+        (typeof value === "string" && value.trim() !== "");
 }
 
 export function validateCreateInput(body: unknown): body is CreateItemInput {
-    if (typeof body !== "object" || body === null) return false;
-    
-    const { name, quantity } = body as Record<string, unknown>;
-    
-    return typeof name === "string" && name.trim().length > 0 && isValidQuantity(quantity);
+    if (!body || typeof body !== "object") {
+        return false;
+    }
+
+    const data = body as Record<string, unknown>;
+
+    return (
+        typeof data.name === "string" &&
+        data.name.trim() !== "" &&
+        isValidQuantity(data.quantity)
+    );
 }
 
 export function validateUpdateInput(body: unknown): body is UpdateItemInput {
-    if (typeof body !== "object" || body === null) return false;
-    
-    const entries = Object.entries(body as Record<string, unknown>);
-    if (entries.length === 0) return false;
+    if (!body || typeof body !== "object") {
+        return false;
+    }
 
-    return entries.every(([key, value]) => {
-        if (value === undefined) return true;
-        
-        switch (key) {
-            case "name":
-                return typeof value === "string" && value.trim().length > 0;
-            case "quantity":
-                return isValidQuantity(value);
-            case "purchased":
-                return typeof value === "boolean";
-            default:
-                return true;
+    const data = body as Record<string, unknown>;
+    const keys = Object.keys(data);
+
+    if (keys.length === 0) {
+        return false;
+    }
+
+    for (const key of keys) {
+        const value = data[key];
+
+        if (value === undefined) {
+            continue;
         }
-    });
+
+        if (key === "name" && (typeof value !== "string" || value.trim() === "")) {
+            return false;
+        }
+
+        if (key === "quantity" && !isValidQuantity(value)) {
+            return false;
+        }
+
+        if (key === "purchased" && typeof value !== "boolean") {
+            return false;
+        }
+    }
+
+    return true;
 }
