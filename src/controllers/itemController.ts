@@ -1,12 +1,9 @@
-import { IncomingMessage, ServerResponse } from "http";;
+import { IncomingMessage, ServerResponse } from "http";
 import { ShoppingItem, validateCreateInput, validateUpdateInput } from "../Models/item";
 import { sendJson, parseJsonBody } from "../utils/response";
 
-const db: ShoppingItem[] = [
-  { id: "1", name: "Milk", quantity: "2L", purchased: false, createdAt: new Date().toISOString() },
-  { id: "2", name: "Eggs", quantity: 12, purchased: false, createdAt: new Date().toISOString() },
-  { id: "3", name: "Bread", quantity: 1, purchased: true, createdAt: new Date().toISOString() }
-];
+
+let db: ShoppingItem[] = [];
 
 export async function getAll(res: ServerResponse) {
   sendJson(res, 200, { success: true, data: db });
@@ -64,6 +61,7 @@ export async function remove(res: ServerResponse, id: string) {
     return sendJson(res, 404, { success: false, error: { message: `Item ${id} not found` } });
   }
 
+ 
   db.splice(index, 1);
   res.writeHead(204).end();
 }

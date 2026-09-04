@@ -1,17 +1,20 @@
 {
   "name": "shopping-list-api",
   "version": "1.0.0",
-  "description": "Shopping List REST API built with Node.js and TypeScript",
+  "description": "Production-grade native Node.js and TypeScript Shopping List REST API",
   "main": "dist/server.js",
   "scripts": {
     "build": "tsc",
     "start": "node dist/server.js",
-    "dev": "ts-node src/server.ts",
-    "test:api": "newman run test/shopping_list_api.postman_collection.json"
+    "dev": "npx ts-node src/server.ts",
+    "test:api": "npx newman run \"./src/test/shopping_list_api.json\""
   },
+  "keywords": [],
+  "author": "",
   "license": "ISC",
+  "dependencies": {},
   "devDependencies": {
-    "@types/node": "^20.19.43",
+    "@types/node": "^20.11.0",
     "newman": "^6.2.2",
     "ts-node": "^10.9.2",
     "typescript": "^5.3.3"
