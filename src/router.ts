@@ -9,10 +9,11 @@ export async function handleRoutes(req: IncomingMessage, res: ServerResponse): P
     if (method === "GET" && url === "/items") return await controller.getAll(res);
     if (method === "POST" && url === "/items") return await controller.create(req, res);
 
-    if (url.startsWith("/items/")) {
-      const id = url.split("/")[2]?.trim();
+    if (url && url.startsWith("/items/")) {
+      const parts = url.split("/");
+      const id = parts[2]
 
-      if (!id) {
+      if (!id || id.trim() === "") {
         return sendJson(res, 400, { success: false, error: { message: "Item ID is missing" } });
       }
 
