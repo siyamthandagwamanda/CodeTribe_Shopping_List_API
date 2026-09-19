@@ -1,7 +1,7 @@
 import { createServer } from "http";
 import { handleRoutes } from "./router";
 
-const PORT = Number(process.env.PORT) || 3000;
+const PORT = Number(process.env.PORT) || 4000;
 
 const server = createServer(async (req, res) => {
   res.setHeader("Access-Control-Allow-Origin", "*");

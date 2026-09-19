@@ -1,56 +1,112 @@
 <img src="https://socialify.git.ci/siyamthandagwamanda/CodeTribe_Shopping_List_API/image?language=1&owner=1&name=1&stargazers=1&theme=Light" alt="CodeTribe_Shopping_List_API" width="640" height="320" />
 
-Node.js & TypeScript Shopping List REST API
+ShoppingList-API
+Simple Node + TypeScript HTTP API for managing a shopping list.
 
-A lightweight, zero-dependency REST API engineered purely with the Node.js native `http` module and strict TypeScript.
+🚀 Getting Started
+Prerequisites
+Node.js (v22.17+ recommended)
+TypeScript
+Postman, Thunderclient or curl (for testing API requests)
+Clone and Installation
+# Clone the repository and use any terminal 
+git clone https://github.com/siyamthandagwamandaCodeTribe_Shopping_List_API/.git
+cd CodeTribe_Shopping_List_APIs
 
-## 🛠️ Technology Stack & Architecture
-- **Language:** TypeScript (Strict Compilation Mode)
-- **Runtime Environment:** Node.js (Frameworkless HTTP Core Module)
-- **Pattern:** Router-Controller Architecture
-- **Testing Engine:** Postman / Newman Automation
+# Install dependencies
+npm install
 
----
+# Start the server (development)
+npm run dev
+The server runs at http://localhost:3000.
 
-## 🚀 Local Development Setup Instruction Flow
+📁 Project Structure
+├── src/
+│   ├── controllers/
+│   │   └── itemsController.ts      # In-memory store + CRUD logic
+│   ├──/
+│   │   └── router.ts      # HTTP route handler for /items
+│   ├── Model/
+│   │   └── items.ts      # Item interface
+│   └── server.ts         # HTTP server & router
+├── package.json
+├── tsconfig.json
+└── README.md
 
-1. **Install Project Dependencies**
-   ```bash
-   npm install
-   ```
+🧠 Core Features
+Add an item — POST /items
+Get all items — GET /items
+Get item by ID — GET /items/:id
+Update an item — PUT /items/:id
+Delete an item - DELETE /items/:id
 
-2. **Boot Live Local Hot-Reload Dev Engine**
-   ```bash
-   npm run dev
-   ```
+Item shape (src/Model/items.ts):
 
-3. **Build Target Output Bundles into Native JavaScript**
-   ```bash
-   npm run build
-   ```
+interface Item {
+  id: number
+  name: string
+  purchased: boolean
+  quantity: number
+  price: number
+}
 
-4. **Boot Up Production Engine Compiled Target**
-   ```bash
-   npm run start
-   ```
+📫 API Endpoints
+➕ Add an Item
+POST /items
 
-5. **Execute Headless Integration Endpoint Verification Tests**
-   ```bash
-   npm run test:api
-   ```
+Request Body (JSON)
 
----
+{ "name": "Milk", "purchased": false, "quantity": 2, "price": 10 }
+Response
 
-## 🎛️ API Endpoint Matrix Specification Route Contracts
+{ "id": 1, "name": "Milk", "purchased": false, "quantity": 2, "price": 10 }
+📄 Get All Items
+GET /items
 
-All pipeline returns strictly enforce a uniform response wrapper format (`ApiResponse<T>`).
+Response
 
-| HTTP Method | API Route Path | Body Payload Structure Input Shape | Status Outcomes |
-| :--- | :--- | :--- | :--- |
-| **GET** | `/items` | None | `200 OK` |
-| **POST** | `/items` | `{ "name": string, "quantity": string \| number }` | `201 Created`, `400 Bad Request` |
-| **GET** | `/items/:id` | Path parameter string matching resource `id` | `200 OK`, `404 Not Found` |
-| **PUT** | `/items/:id` | `{ "name"?: string, "quantity"?: string \| number, "purchased"?: boolean }` | `200 OK`, `400 Bad Request`, `404 Not Found` |
-| **DELETE** | `/items/:id` | Path parameter string matching resource `id` | `204 No Content`, `404 Not Found` |
+[
+  { "id": 1, "name": "Milk", "purchased": false, "quantity": 2, "price": 10 }
+]
+🔍 Get Single Item
+GET /items/:id
 
+Response
 
+{ "id": 1, "name": "Milk", "purchased": false, "quantity": 2, "price": 10 }
+✏️ Update Item
+PUT /items/:id
+
+Request Body (JSON — all fields required by route)
+
+{ "name": "Milk", "purchased": true, "quantity": 3, "price": 12 }
+Response
+
+{ "id": 1, "name": "Milk", "purchased": true, "quantity": 3, "price": 12 }
+Notes:
+
+The controller supports partial updates internally, but the current route validates all fields. If you want partial updates via the route, relax those validations in src/routes/items.ts.
+
+🧪 Testing with curl
+# Create
+curl -X POST http://localhost:3000/items \
+  -H "Content-Type: application/json" \
+  -d '{"name":"Apples","purchased":false,"quantity":5,"price":10}'
+
+# Read all
+curl http://localhost:3000/items
+
+# Read one
+curl http://localhost:3000/items/1
+
+# Update
+curl -X PUT http://localhost:3000/items/1 \
+  -H "Content-Type: application/json" \
+  -d '{"name":"Green Apples","purchased":true,"quantity":6,"price":12}'
+
+⚠️ Error Handling
+All error responses follow a consistent JSON format:
+
+{"error": "Description of the error"}
+400 Bad Request: Invalid JSON payload or missing/invalid fields
+404 Not Found: Item not found
