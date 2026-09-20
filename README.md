@@ -36,8 +36,8 @@ The server runs at <http://localhost:3000>.
 ├── src/
 │   ├── controllers/
 │   │   └── itemsController.ts   # In-memory store + CRUD logic
-│   ├── routes/
-│   │   └── items.ts             # HTTP route handler for /items
+│   ├──/
+│   │   └── router.ts             # HTTP route handler for /items
 │   ├── Model/
 │   │   └── items.ts             # Item interface
 │   └── server.ts                # HTTP server & router
